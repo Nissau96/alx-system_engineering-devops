@@ -11,4 +11,13 @@ This directory contains scripts related to Shell initialization files, shell var
 - **Usage:**
   ```bash
   source ./0-alias
-  ls     # This will now delete all files in the current directory!
+  ls     
+
+### 1-hello_you
+- **Purpose:** Prints "hello <user>" where `<user>` is the current logged-in Linux user.
+- **Command used:** `echo "hello $USER"`
+- **Usage:**
+  ```bash
+  ./1-hello_you
+  # Output:
+  hello julien
