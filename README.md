@@ -21,7 +21,7 @@ The following table details each script and its function.
 | File          | Description                                                    |
 |---------------|----------------------------------------------------------------|
 | `0-alias`     | Creates a shell alias where the command `ls` is mapped to `rm *`. |
-| `1-hello_you` | *Description for the next task will go here.* |
+| `1-hello_you` | Prints "hello user", where "user" is the current Linux user. |
 | `2-path`      | *Description for the next task will go here.* |
 
 ---
