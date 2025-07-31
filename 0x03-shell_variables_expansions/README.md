@@ -15,7 +15,7 @@ This directory contains scripts related to Shell initialization files, shell var
 
 ### 1-hello_you
 - **Purpose:** Prints "hello <user>" where `<user>` is the current logged-in Linux user.
-- **Command used:** `echo "hello $USER"`
+- **Command used:** `echo "hello $(whoami)"`
 - **Usage:**
   ```bash
   ./1-hello_you
