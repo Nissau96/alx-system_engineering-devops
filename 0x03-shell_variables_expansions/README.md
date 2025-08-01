@@ -270,3 +270,22 @@ export DECIMAL=1337
 # Output: 539
 ```
 
+### 15. Everyone is a proponent of strong encryption
+
+**File:** `101-rot13`
+
+A Bash script that encodes and decodes text using the ROT13 encryption technique.
+
+- Assumes input text is ASCII.
+- The script reads from standard input and outputs ROT13-encoded text.
+- ROT13 is symmetric, so encoding the output again decodes it.
+
+#### Example:
+
+Given a file named `quote` with the content:
+```text
+"Everyone is a proponent of strong encryption."
+
+- Dorothy E. Denning
+
+```
