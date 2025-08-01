@@ -18,10 +18,12 @@ This project focuses on the foundational concepts of the shell in Unix-like oper
 
 The following table details each script and its function.
 
-| File          | Description                                                    |
-|---------------|----------------------------------------------------------------|
-| `0-alias`     | Creates a shell alias where the command `ls` is mapped to `rm *`. |
-| `1-hello_you` | Prints "hello user", where "user" is the current Linux user.   |
-| `2-path`      | *Description for the next task will go here.* |
+| File          | Description                                                         |
+|---------------|---------------------------------------------------------------------|
+| `0-alias`     | Creates a shell alias where the command `ls` is mapped to `rm *`.      |
+| `1-hello_you` | Prints "hello user", where "user" is the current Linux user.        |
+| `2-path`      | Adds the directory `/action` to the end of the `PATH` variable.     |
+| `3-paths`     | Counts the number of directories in the `PATH` environment variable. |
+| `4-global_variables` | *Description for the next task will go here.* |
 
 ---
