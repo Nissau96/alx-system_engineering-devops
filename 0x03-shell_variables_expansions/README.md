@@ -328,3 +328,22 @@ t~
 usr
 vmlinuz
 ```
+### 17. I'm an instant star. Just add water and stir.
+
+**File:** `103-water_and_stir`
+
+This shell script performs arithmetic on two environment variables, `WATER` and `STIR`, which are encoded in custom numeral systems.
+
+- `WATER` is encoded in base `water` using characters: `e`, `w`, `a`, `t`, `r`
+- `STIR` is encoded in base `stir` using characters: `t`, `i`, `.`, `r`, `s`
+- The result is output in base `bestchol` using characters: `b`, `e`, `s`, `t`, `c`, `h`, `o`, `l`
+
+#### Example:
+
+```bash
+export WATER="ewwatratewa"
+export STIR="ti.itirtrtr"
+./103-water_and_stir
+
+Output:
+shtbeolhc
