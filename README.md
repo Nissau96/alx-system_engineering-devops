@@ -30,6 +30,7 @@ The following table details each script and its function.
 | `7-create_global_variable`| Creates a new global variable named `BEST` with the value `School`. |
 | `8-true_knowledge` | Prints the result of 128 + the value of the `TRUEKNOWLEDGE` variable. |
 | `9-divide_and_rule` | Prints the result of the `POWER` variable divided by the `DIVIDE` variable. |
-| `10-love_exponent_breath` | Displays the result of the `BREATH` variable to the power of the `LOVE` variable. |
+| `10-love_exponent_breath`| Displays the result of the `BREATH` variable to the power of the `LOVE` variable. |
+| `11-binary_to_decimal` | Converts a number from base 2 to base 10. |
 
 ---
