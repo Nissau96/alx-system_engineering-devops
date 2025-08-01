@@ -289,3 +289,42 @@ Given a file named `quote` with the content:
 - Dorothy E. Denning
 
 ```
+### 16. The eggs of the brood need to be an odd number
+
+**File:** `102-odd`
+
+A Bash script that prints every other line from standard input, starting with the first line.
+
+- Uses `awk` to filter and output only odd-numbered lines.
+- Accepts piped input or reads directly from standard input.
+
+#### Example Usage:
+
+```bash
+ls -1 | ./102-odd
+
+Given:
+
+bin
+boot
+dev
+etc
+home
+...
+
+Output:
+
+dev
+home
+lib
+lib64
+lost+found
+mnt
+proc
+run
+srv
+t
+t~
+usr
+vmlinuz
+```
