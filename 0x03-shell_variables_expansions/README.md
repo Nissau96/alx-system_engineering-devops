@@ -225,3 +225,30 @@ os
 </details> </details> 
 ```
 
+<details>
+<summary><strong>13. Floats</strong></summary>
+
+Write a script that prints a number with **two decimal places**, followed by a new line.
+
+- The number is stored in the environment variable `NUM`.
+- The output should **always show two digits after the decimal**.
+
+**File:** `13-print_float`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ export NUM=0
+$ ./13-print_float
+0.00
+
+$ export NUM=98
+$ ./13-print_float
+98.00
+
+$ export NUM=3.14159265359
+$ ./13-print_float
+3.14
+</details> </details> 
+```
