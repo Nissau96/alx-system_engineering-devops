@@ -1,2 +1,2 @@
 #!/bin/bash
-printf '%o' $((5#$(echo "${WATER:-w}" | tr 'water' '01234') + 5#$(echo "${STIR:-s}" | tr 'stir.' '01234'))) | tr '01234567' 'bestchol'
+printf '%o' $((5#$(echo "${WATER:-w}" | tr -cd 'water' | tr 'water' '01234') + 5#$(echo "${STIR:-s}" | tr -cd 'stir.' | tr 'stir.' '01234'))) | tr '01234567' 'bestchol'
