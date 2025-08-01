@@ -168,3 +168,22 @@ $ ./10-love_exponent_breath
 64
 </details> </details> 
 ```
+
+<details>
+<summary><strong>11. There are 10 types of people in the world -- Those who understand binary, and those who don't</strong></summary>
+
+Write a script that converts a number from base 2 to base 10.
+
+- The number in base 2 is stored in the environment variable `BINARY`
+- The script should display the number in base 10, followed by a new line
+- **File:** `11-binary_to_decimal`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ export BINARY=10100111001
+$ ./11-binary_to_decimal
+1337
+</details> </details> 
+```
