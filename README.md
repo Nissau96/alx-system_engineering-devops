@@ -18,15 +18,16 @@ This project focuses on the foundational concepts of the shell in Unix-like oper
 
 The following table details each script and its function.
 
-| File | Description |
-| :--- | :--- |
-| `0-alias` | Creates a shell alias where the command `ls` is mapped to `rm *`. |
-| `1-hello_you` | Prints "hello user", where "user" is the current Linux user. |
-| `2-path` | Adds the directory `/action` to the end of the `PATH` variable. |
-| `3-paths` | Counts the number of directories in the `PATH` environment variable. |
-| `4-global_variables` | Lists all environment variables in alphabetical order. |
-| `5-local_variables` | Lists all local variables, environment variables, and functions. |
-| `6-create_local_variable` | Creates a new local variable named `BEST` with the value `School`. |
-| `7-create_global_variable` | Creates a new global variable named `BEST` with the value `School`. |
+| File                       | Description                                                               |
+| :------------------------- | :------------------------------------------------------------------------ |
+| `0-alias`                  | Creates a shell alias where the command `ls` is mapped to `rm *`.         |
+| `1-hello_you`              | Prints "hello user", where "user" is the current Linux user.              |
+| `2-path`                   | Adds the directory `/action` to the end of the `PATH` variable.           |
+| `3-paths`                  | Counts the number of directories in the `PATH` environment variable.      |
+| `4-global_variables`       | Lists all environment variables in alphabetical order.                    |
+| `5-local_variables`        | Lists all local variables, environment variables, and functions.          |
+| `6-create_local_variable`  | Creates a new local variable named `BEST` with the value `School`.        |
+| `7-create_global_variable` | Creates a new global variable named `BEST` with the value `School`.       |
+| `8-true_knowledge`         | Prints the result of 128 + the value of the `TRUEKNOWLEDGE` variable.     |
 
 ---
