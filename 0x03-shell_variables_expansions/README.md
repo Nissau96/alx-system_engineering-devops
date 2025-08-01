@@ -148,3 +148,23 @@ $ ./9-divide_and_rule
 1337
 </details> </details> 
 ```
+
+<details>
+<summary><strong>10. Love is anterior to life, posterior to death, initial of creation, and the exponent of breath</strong></summary>
+
+Write a script that displays the result of `BREATH` to the power `LOVE`.
+
+- **BREATH** and **LOVE** are environment variables
+- The script should display the result followed by a new line
+- **File:** `10-love_exponent_breath`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ export BREATH=4
+$ export LOVE=3
+$ ./10-love_exponent_breath
+64
+</details> </details> 
+```
