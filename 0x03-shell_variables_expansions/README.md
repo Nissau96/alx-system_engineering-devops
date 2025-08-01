@@ -78,3 +78,18 @@ BASH=/bin/bash
 BASHOPTS=checkwinsize:cmdhist:complete_fullquote:expand_aliases:...
 # Output continues with all environment/local vars and shell functions
 ```
+
+### 7. Local variable
+
+Create a script that creates a new local variable.
+
+- **Name:** `BEST`  
+- **Value:** `School`  
+- **File:** `6-create_local_variable`
+
+#### Example:
+```bash
+$ source ./6-create_local_variable
+$ echo $BEST
+School
+```
