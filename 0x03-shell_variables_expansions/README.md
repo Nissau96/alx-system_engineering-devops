@@ -252,3 +252,21 @@ $ ./13-print_float
 3.14
 </details> </details> 
 ```
+
+### 14. Decimal to Hexadecimal
+
+**File:** `100-decimal_to_hexadecimal`
+
+A Bash script that converts a number from base 10 to base 16.
+
+- The decimal number is stored in the environment variable `DECIMAL`.
+- The script prints the hexadecimal representation of the number, followed by a new line.
+
+#### Example:
+
+```bash
+export DECIMAL=1337
+./100-decimal_to_hexadecimal
+# Output: 539
+```
+
