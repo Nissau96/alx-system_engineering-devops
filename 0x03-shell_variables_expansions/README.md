@@ -110,5 +110,22 @@ Create a script that creates a new global variable.
 $ source ./7-create_global_variable
 $ echo $BEST
 School
-</details> </details> ```
+</details> </details> 
+```
 
+<details>
+<summary><strong>9. Every addition to true knowledge is an addition to human power</strong></summary>
+
+Write a script that prints the result of the addition of `128` with the value stored in the environment variable `TRUEKNOWLEDGE`, followed by a new line.
+
+- **File:** `8-true_knowledge`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ export TRUEKNOWLEDGE=1209
+$ ./8-true_knowledge | cat -e
+1337$
+</details> </details> 
+```
