@@ -129,3 +129,22 @@ $ ./8-true_knowledge | cat -e
 1337$
 </details> </details> 
 ```
+
+<details>
+<summary><strong>9. Divide and rule</strong></summary>
+
+Write a script that prints the result of `POWER` divided by `DIVIDE`, followed by a new line.
+
+- **POWER** and **DIVIDE** are environment variables
+- **File:** `9-divide_and_rule`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ export POWER=42784
+$ export DIVIDE=32
+$ ./9-divide_and_rule
+1337
+</details> </details> 
+```
