@@ -29,5 +29,6 @@ The following table details each script and its function.
 | `6-create_local_variable`  | Creates a new local variable named `BEST` with the value `School`.        |
 | `7-create_global_variable` | Creates a new global variable named `BEST` with the value `School`.       |
 | `8-true_knowledge`         | Prints the result of 128 + the value of the `TRUEKNOWLEDGE` variable.     |
+| `9-divide_and_rule`        | Prints the result of the `POWER` variable divided by the `DIVIDE` variable. |
 
 ---
