@@ -27,5 +27,6 @@ The following table details each script and its function.
 | `4-global_variables` | Lists all environment variables in alphabetical order. |
 | `5-local_variables` | Lists all local variables, environment variables, and functions. |
 | `6-create_local_variable` | Creates a new local variable named `BEST` with the value `School`. |
+| `7-create_global_variable` | Creates a new global variable named `BEST` with the value `School`. |
 
 ---
