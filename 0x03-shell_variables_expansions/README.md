@@ -186,4 +186,42 @@ $ export BINARY=10100111001
 $ ./11-binary_to_decimal
 1337
 </details> </details> 
+
 ```
+
+<details>
+<summary><strong>12. Combination</strong></summary>
+
+Create a script that prints all possible combinations of two lowercase letters, from `a` to `z`, except `oo`.
+
+- One combination per line
+- The output is ordered alphabetically starting from `aa`
+- Do not print `oo`
+- The script must contain **a maximum of 64 characters**
+
+**File:** `12-combinations`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ ./12-combinations | wc -l
+675
+
+$ ./12-combinations | grep oo
+# (no output)
+
+$ ./12-combinations | tail -303 | head -10
+oi
+oj
+ok
+ol
+om
+on
+op
+oq
+or
+os
+</details> </details> 
+```
+
