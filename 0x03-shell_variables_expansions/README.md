@@ -56,3 +56,25 @@ CDPATH=.:~:/usr/local:/usr:/
 
 ```
 
+## 5. Local variables
+
+**Objective**:  
+Create a script that lists all local variables, environment variables, and functions.
+
+**File**: `5-local_variables`
+
+### Requirements:
+- Must be exactly **2 lines** long.
+- Must use the `set` command.
+- **Must not** use `&&`, `||`, `;`, `sed`, or `bc`.
+
+---
+
+### ✅ Example:
+
+```bash
+$ source ./5-local_variables
+BASH=/bin/bash
+BASHOPTS=checkwinsize:cmdhist:complete_fullquote:expand_aliases:...
+# Output continues with all environment/local vars and shell functions
+```
