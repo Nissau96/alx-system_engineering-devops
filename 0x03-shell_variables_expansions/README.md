@@ -33,7 +33,7 @@ This directory contains scripts related to Shell initialization files, shell var
 
 ### 3-paths
 - **Purpose:** Counts the number of **non-empty directories** listed in the `PATH` environment variable.
-- **Command used:** `echo "$PATH" | grep -o '[^:]\+' | wc -l`
+- **Command used:** `echo $PATH | tr ':' '\n' | wc -l`
 - **Usage:**
   ```bash
   . ./3-paths
