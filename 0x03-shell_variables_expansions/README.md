@@ -93,3 +93,22 @@ $ source ./6-create_local_variable
 $ echo $BEST
 School
 ```
+
+<details>
+<summary><strong>8. Global variable</strong></summary>
+
+Create a script that creates a new global variable.
+
+- **Name:** `BEST`  
+- **Value:** `School`  
+- **File:** `7-create_global_variable`
+
+<details>
+<summary>Example:</summary>
+
+```bash
+$ source ./7-create_global_variable
+$ echo $BEST
+School
+</details> </details> ```
+
