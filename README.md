@@ -25,6 +25,6 @@ The following table details each script and its function.
 | `2-path` | Adds the directory `/action` to the end of the `PATH` variable. |
 | `3-paths` | Counts the number of directories in the `PATH` environment variable. |
 | `4-global_variables` | Lists all environment variables in alphabetical order. |
-| `5-local_variables` | *Description for the next task will go here.* |
+| `5-local_variables` | Lists all local variables, environment variables, and functions. |
 
 ---
