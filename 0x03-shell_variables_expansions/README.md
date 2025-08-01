@@ -38,3 +38,21 @@ This directory contains scripts related to Shell initialization files, shell var
   ```bash
   . ./3-paths
   # Output: 11 (or depending on your PATH)
+
+### 4. Global variables
+
+Create a script that lists environment variables.
+
+- **File:** `4-global_variables`
+- Must be exactly **2 lines**
+- Must use the `printenv` command
+- Must **not** use `&&`, `||`, `;`, `sed`, or `bc`
+
+**Example:**
+```bash
+$ source ./4-global_variables
+CC=gcc
+CDPATH=.:~:/usr/local:/usr:/
+
+```
+
