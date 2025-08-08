@@ -1,0 +1,122 @@
+# Task 0: Simple Web Stack
+
+## Infrastructure Diagram
+
+```
+User Request (www.foobar.com)
+         |
+         ↓
+[Internet/DNS Resolution]
+         |
+         ↓
+    Server (8.8.8.8)
+    ┌─────────────────────┐
+    │                     │
+    │  ┌───────────────┐  │
+    │  │  Nginx        │  │ ← Web Server
+    │  │  (Port 80)    │  │
+    │  └───────────────┘  │
+    │         │           │
+    │         ↓           │
+    │  ┌───────────────┐  │
+    │  │ Application   │  │ ← Application Server
+    │  │ Server        │  │   (Python/PHP)
+    │  │ (Your Code)   │  │
+    │  └───────────────┘  │
+    │         │           │
+    │         ↓           │
+    │  ┌───────────────┐  │
+    │  │ MySQL         │  │ ← Database
+    │  │ Database      │  │
+    │  └───────────────┘  │
+    └─────────────────────┘
+```
+
+## Component Explanations
+
+### What is a server?
+A server is a computer or computer program that provides services to other computers or programs (clients) over a network. In our case, it's a physical or virtual machine hosting our web infrastructure components.
+
+### What is the role of the domain name?
+The domain name (foobar.com) serves as a human-readable address that users can remember and type instead of memorizing IP addresses. It acts as an alias for the server's IP address (8.8.8.8).
+
+### What type of DNS record is www in www.foobar.com?
+The "www" is typically a CNAME (Canonical Name) record that points to the main domain, or it could be an A record that directly points to the IP address 8.8.8.8.
+
+### What is the role of the web server?
+Nginx (the web server) handles:
+- Receiving HTTP requests from users
+- Serving static content (CSS, JavaScript, images)
+- Acting as a reverse proxy to forward dynamic requests to the application server
+- Load balancing (in more complex setups)
+- SSL termination
+- Compression and caching
+
+### What is the role of the application server?
+The application server:
+- Executes the application logic/business rules
+- Processes dynamic content requests
+- Connects to and queries the database
+- Generates dynamic HTML responses
+- Handles user sessions and authentication
+- Runs the actual code base (Python, PHP, etc.)
+
+### What is the role of the database?
+MySQL database:
+- Stores application data persistently
+- Manages data relationships and integrity
+- Handles concurrent data access
+- Provides data backup and recovery
+- Executes queries and returns results to the application
+
+### Communication Protocol
+The server communicates with the user's computer using **HTTP/HTTPS protocol** over **TCP/IP**. The communication flow:
+1. User types www.foobar.com in browser
+2. DNS resolves to IP 8.8.8.8
+3. Browser sends HTTP request to server
+4. Server processes request and sends HTTP response
+5. Browser renders the response
+
+## Infrastructure Issues
+
+### 1. SPOF (Single Point of Failure)
+**Problem**: The entire infrastructure depends on one server. If it fails, the website becomes completely unavailable.
+**Impact**: 100% downtime if server crashes, hardware fails, or network issues occur.
+
+### 2. Downtime during maintenance
+**Problem**: Deploying new code, updating the OS, or restarting services requires taking the server offline.
+**Impact**: Planned downtime affects user experience and business operations.
+
+### 3. Cannot scale with traffic
+**Problem**: Single server has limited CPU, RAM, and bandwidth capacity.
+**Impact**: Performance degrades with increased traffic, potentially leading to crashes or very slow response times.
+
+## Additional Considerations
+
+### Security Issues
+- No HTTPS encryption shown
+- No firewall protection illustrated
+- Database and web server on same machine increases attack surface
+- No intrusion detection system
+
+### Performance Limitations
+- No caching mechanisms shown
+- No Content Delivery Network (CDN)
+- Limited concurrent user capacity
+- No load distribution
+
+### Reliability Concerns
+- No backup server or failover mechanism
+- No data replication
+- No monitoring or alerting systems
+- Single network connection point
+
+## Recommended Improvements (Future Tasks)
+1. Add redundant servers
+2. Implement load balancing
+3. Separate database to dedicated server
+4. Add HTTPS/SSL certificates
+5. Implement caching strategies
+6. Set up monitoring and alerting
+7. Configure automated backups
+8. Add Content Delivery Network (CDN)
