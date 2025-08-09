@@ -38,3 +38,11 @@ A basic web infrastructure with:
 1. Single Point of Failure (SPOF)
 2. Maintenance causes downtime
 3. No scalability
+
+### 📄 Task 1: Distributed web infrastructure
+
+A design that introduces a load balancer and distributes web infrastructure components across three servers.
+
+* **File:** `1-distributed_web_infrastructure`
+* **Diagram:** [Link to your hosted image of 1-distributed_web_infrastructure.png]
+* **Description:** This design separates the web server, application server, and database onto different machines and adds a load balancer (HAProxy) as the entry point. It explains concepts like load-balancing algorithms, Active-Active setups, and Primary-Replica database clusters. It also identifies the remaining SPOFs and security vulnerabilities.
