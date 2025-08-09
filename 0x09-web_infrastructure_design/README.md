@@ -52,3 +52,10 @@ A design that adds security and observability to the distributed infrastructure 
 
 * **File:** `2-secured_and_monitored_web_infrastructure`
 * **Description:** This architecture secures the 3-server setup with firewalls on each host and encrypts traffic using an SSL certificate on the load balancer. It also adds monitoring clients to each server for data collection. The design highlights key issues like the risk of SSL termination and the SPOF of a single write-database.
+
+### 📄 Task 3: Scale up
+
+A design that scales up the infrastructure by fully splitting the web, application, and database components onto dedicated servers and creating a high-availability load balancer cluster.
+
+* **File:** `3-scale_up`
+* **Description:** This architecture evolves into a classic N-tier model. It uses a 5-server setup to create a fully separated and more scalable system. It explains the purpose of a dedicated server for each component and provides a clear distinction between a web server and an application server.
