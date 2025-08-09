@@ -1,0 +1,402 @@
+# Task 2: Secured and Monitored Web Infrastructure
+
+## Infrastructure Diagram
+
+```
+User Request (https://www.foobar.com)
+         |
+         ↓
+[Internet/DNS Resolution - SSL Certificate]
+         |
+         ↓
+    Load Balancer + Firewall 1
+    Server 1 (8.8.8.8)
+    ┌─────────────────────┐
+    │ 🔥 Firewall         │
+    │  ┌───────────────┐  │
+    │  │  HAproxy      │  │ ← Load Balancer + SSL Termination
+    │  │  (Port 443)   │  │   📊 Monitoring Client 1
+    │  │  SSL Cert     │  │
+    │  └───────────────┘  │
+    └─────────────────────┘
+            │
+            ├─────────────────────────────────┐
+            ↓                                 ↓
+    Web Server + Firewall 2          Application Server + Firewall 3
+    Server 2 (8.8.8.9)              Server 3 (8.8.8.10)
+    ┌─────────────────────┐          ┌─────────────────────┐
+    │ 🔥 Firewall         │          │ 🔥 Firewall         │
+    │  ┌───────────────┐  │          │  ┌───────────────┐  │
+    │  │  Nginx        │  │          │  │  Python App   │  │
+    │  │  (Port 80)    │  │          │  │  (Port 5000)  │  │
+    │  └───────────────┘  │          │  │  Application  │  │
+    │  ┌───────────────┐  │          │  │  Files        │  │
+    │  │ Application   │  │          │  └───────────────┘  │
+    │  │ Files (Copy)  │  │          │  ┌───────────────┐  │
+    │  └───────────────┘  │          │  │ MySQL Primary│  │
+    │  ┌───────────────┐  │          │  │ Database      │  │
+    │  │ MySQL Replica │  │          │  │ (Write-Only)  │  │
+    │  │ Database      │  │          │  └───────────────┘  │
+    │  └───────────────┘  │          │                     │
+    │ 📊 Monitoring       │          │ 📊 Monitoring       │
+    │    Client 2         │          │    Client 3         │
+    └─────────────────────┘          └─────────────────────┘
+                                              │
+                                              ↓
+                                    [Database Replication]
+                                              ↓
+                        📊 Monitoring Service (Sumologic/Datadog/New Relic)
+```
+
+## Why Each Additional Element Was Added
+
+### 3 Firewalls
+**Purpose**: Provide network-level security protection for each server
+**Placement**:
+- **Firewall 1 (Load Balancer)**: Protects entry point, filters malicious traffic
+- **Firewall 2 (Web Server)**: Protects web services, controls internal traffic
+- **Firewall 3 (Application Server)**: Protects database and application logic
+
+**Benefits**:
+- Defense in depth security strategy
+- Protection against network-based attacks
+- Traffic filtering and access control
+- Intrusion prevention
+- DDoS mitigation
+- Port and protocol restrictions
+
+### SSL Certificate for HTTPS
+**Purpose**: Encrypt all traffic between users and the website
+**Implementation**: SSL certificate installed on load balancer for www.foobar.com
+**Benefits**:
+- Data encryption in transit
+- Authentication of website identity
+- Protection against man-in-the-middle attacks
+- Compliance with security standards
+- SEO benefits (search engines favor HTTPS)
+- User trust and confidence
+- Protection of sensitive data (passwords, personal info)
+
+### 3 Monitoring Clients
+**Purpose**: Collect performance and health data from each server
+**Placement**:
+- **Client 1**: Monitors load balancer performance and SSL metrics
+- **Client 2**: Monitors web server performance and static content delivery
+- **Client 3**: Monitors application server and database performance
+
+**Benefits**:
+- Real-time performance monitoring
+- Early problem detection
+- Capacity planning data
+- Security incident detection
+- Performance optimization insights
+- SLA compliance tracking
+
+## What Firewalls Are For
+
+### Primary Functions
+1. **Traffic Filtering**: Allow/deny traffic based on predefined rules
+2. **Port Control**: Block unused ports to reduce attack surface
+3. **Protocol Inspection**: Examine packets for malicious content
+4. **Access Control**: Restrict access to specific IP ranges
+5. **Logging**: Record all network activity for security analysis
+
+### Security Protection
+- **Prevent Unauthorized Access**: Block attackers from reaching services
+- **DDoS Protection**: Rate limiting and traffic shaping
+- **Intrusion Prevention**: Detect and block attack patterns
+- **Network Segmentation**: Isolate different network zones
+- **Compliance**: Meet security standards and regulations
+
+### Firewall Rules Example
+```
+Load Balancer Firewall:
+- Allow: Port 80, 443 from Internet
+- Allow: Port 22 from admin IPs only
+- Allow: Monitoring ports from monitoring service
+- Deny: All other traffic
+
+Web/App Server Firewalls:
+- Allow: HTTP/HTTPS from Load Balancer only
+- Allow: Database connections internally
+- Allow: SSH from admin IPs only
+- Allow: Monitoring agent communications
+- Deny: Direct Internet access
+```
+
+## Why Traffic is Served Over HTTPS
+
+### Data Protection
+- **Encryption**: All data encrypted using TLS/SSL protocols
+- **Confidentiality**: Prevents eavesdropping on sensitive information
+- **Integrity**: Ensures data isn't modified during transmission
+- **Authentication**: Verifies website identity to users
+
+### Security Benefits
+- **Prevents Man-in-the-Middle Attacks**: Attackers can't intercept or modify data
+- **Session Hijacking Protection**: Encrypted session cookies
+- **Password Protection**: Login credentials encrypted
+- **Privacy Protection**: User browsing patterns hidden from ISPs
+
+### Business Benefits
+- **User Trust**: Users feel safe entering personal information
+- **SEO Advantages**: Search engines rank HTTPS sites higher
+- **Compliance**: Required for PCI DSS and other standards
+- **Modern Standards**: Expected by users and browsers
+- **No Mixed Content Warnings**: All resources served securely
+
+## What Monitoring is Used For
+
+### Performance Monitoring
+- **Response Times**: Track how fast pages load
+- **Throughput**: Monitor requests per second
+- **Resource Usage**: CPU, memory, disk utilization
+- **Database Performance**: Query times, connection counts
+- **Network Performance**: Bandwidth usage, latency
+
+### Health Monitoring
+- **Service Availability**: Ensure all services are running
+- **Error Rates**: Track 4xx and 5xx HTTP errors
+- **Failed Requests**: Monitor connection failures
+- **Resource Exhaustion**: Alert when resources are low
+
+### Security Monitoring
+- **Failed Login Attempts**: Detect brute force attacks
+- **Suspicious Traffic**: Identify potential attacks
+- **Security Events**: Monitor firewall blocks
+- **Access Patterns**: Detect unusual user behavior
+
+### Business Intelligence
+- **User Analytics**: Track user behavior and trends
+- **Capacity Planning**: Predict future resource needs
+- **Performance Optimization**: Identify bottlenecks
+- **SLA Compliance**: Ensure service level agreements are met
+
+## How Monitoring Tool Collects Data
+
+### Data Collection Methods
+
+#### 1. Agent-Based Collection
+```
+Monitoring Agent → Collects Metrics → Sends to Central Service
+```
+- **Process**: Lightweight agent installed on each server
+- **Data Types**: System metrics, application logs, custom metrics
+- **Frequency**: Real-time or configurable intervals (e.g., every 30 seconds)
+- **Transport**: HTTPS/TLS encrypted transmission
+
+#### 2. Log File Parsing
+```
+Application Logs → Agent Parsing → Structured Data → Monitoring Service
+```
+- **Sources**: Nginx access logs, application logs, system logs
+- **Processing**: Parse, filter, and structure log data
+- **Analysis**: Extract metrics like response times, error rates
+
+#### 3. API Monitoring
+```
+HTTP Requests → Application APIs → Response Analysis → Metrics
+```
+- **Health Checks**: Regular API endpoint testing
+- **Response Time**: Measure API performance
+- **Error Detection**: Monitor for failed responses
+
+#### 4. Database Monitoring
+```
+Database Queries → Performance Metrics → Analysis → Alerts
+```
+- **Query Performance**: Monitor slow queries
+- **Connection Monitoring**: Track database connections
+- **Resource Usage**: Database CPU, memory, disk usage
+
+### Data Flow Architecture
+```
+Server Metrics → Monitoring Agent → Encryption → Network Transport → 
+Monitoring Service → Data Processing → Dashboard/Alerts → System Administrators
+```
+
+## Monitoring Web Server QPS (Queries Per Second)
+
+### Implementation Steps
+
+#### 1. Configure Nginx Logging
+```nginx
+# Enable detailed logging with response times
+log_format detailed '$remote_addr - $remote_user [$time_local] '
+                   '"$request" $status $bytes_sent '
+                   '"$http_referer" "$http_user_agent" '
+                   '$request_time $upstream_response_time';
+
+access_log /var/log/nginx/access.log detailed;
+```
+
+#### 2. Monitoring Agent Configuration
+```yaml
+# Example configuration for monitoring agent
+nginx_monitoring:
+  log_path: /var/log/nginx/access.log
+  metrics:
+    - requests_per_second
+    - response_time_avg
+    - status_code_distribution
+  interval: 30s
+```
+
+#### 3. Custom Metrics Collection
+```python
+# Example Python script for QPS calculation
+import time
+import re
+
+def calculate_qps(log_file, window=60):
+    current_time = time.time()
+    request_count = 0
+    
+    with open(log_file, 'r') as f:
+        for line in f:
+            timestamp = extract_timestamp(line)
+            if current_time - timestamp <= window:
+                request_count += 1
+    
+    return request_count / window
+```
+
+#### 4. Dashboard Setup
+- **Real-time QPS Graph**: Shows current and historical QPS
+- **Alert Thresholds**: Set alerts for high/low QPS values
+- **Drill-down Analysis**: Break down QPS by endpoint, status code
+- **Comparative Analysis**: Compare QPS across different time periods
+
+#### 5. Alert Configuration
+```yaml
+alerts:
+  high_qps:
+    condition: qps > 1000
+    action: notify_admin
+    escalation: scale_infrastructure
+  
+  low_qps:
+    condition: qps < 10 AND time > business_hours
+    action: investigate_issues
+```
+
+## Infrastructure Issues
+
+### 1. SSL Termination at Load Balancer Level
+
+#### The Problem
+**Issue**: SSL is terminated at the load balancer, internal traffic is unencrypted
+
+#### Why This Is Problematic
+- **Internal Network Exposure**: Traffic between load balancer and backend servers is in plain text
+- **Compliance Issues**: Some regulations require end-to-end encryption
+- **Internal Threats**: Malicious insiders can intercept internal traffic
+- **Network Sniffing**: Internal network monitoring can capture sensitive data
+- **Lateral Movement**: Attackers who breach internal network can see all traffic
+
+#### Security Risks
+- **Data Exposure**: Passwords, personal data visible internally
+- **Session Hijacking**: Internal attackers can steal session cookies
+- **API Key Exposure**: API keys and tokens visible in internal requests
+- **Database Credentials**: Connection strings may be visible
+
+#### Better Alternatives
+1. **End-to-End Encryption**: SSL from client to backend servers
+2. **SSL Passthrough**: Load balancer forwards encrypted traffic
+3. **Internal SSL Certificates**: Encrypt internal traffic separately
+4. **Network Segmentation**: Isolate internal traffic with VPNs
+
+### 2. Single MySQL Server for Writes
+
+#### The Problem
+**Issue**: Only one MySQL server (Primary) can accept write operations
+
+#### Why This Is Problematic
+- **Single Point of Failure**: If Primary fails, no writes possible
+- **Write Bottleneck**: All write traffic goes through one server
+- **Scalability Limitation**: Cannot scale write operations horizontally
+- **Maintenance Downtime**: Updates to Primary cause write outages
+
+#### Impact on Business
+- **Data Loss Risk**: If Primary crashes during write operations
+- **Application Downtime**: Read-only mode during Primary failures
+- **Performance Degradation**: Write performance limited by single server
+- **Backup/Recovery Complexity**: Point-in-time recovery more difficult
+
+#### Better Solutions
+1. **MySQL Cluster**: Multiple write-capable nodes
+2. **Galera Cluster**: Multi-master synchronous replication
+3. **MySQL Group Replication**: Automatic failover and recovery
+4. **Database Sharding**: Distribute writes across multiple databases
+5. **Read Replicas with Automatic Failover**: Promote replica to Primary
+
+### 3. Servers with Same Components (Database, Web Server, Application Server)
+
+#### The Problem
+**Issue**: Each server contains all components instead of specialized roles
+
+#### Why This Is Problematic
+
+#### Resource Conflicts
+- **Memory Competition**: Database and application compete for RAM
+- **CPU Contention**: Web server and database both CPU-intensive
+- **Disk I/O Conflicts**: Multiple services competing for disk access
+- **Network Bandwidth**: All services sharing network resources
+
+#### Security Risks
+- **Larger Attack Surface**: More services exposed per server
+- **Privilege Escalation**: Compromise of one service affects all
+- **Data Exposure**: Database accessible from web-facing server
+- **Lateral Movement**: Easier for attackers to move between services
+
+#### Operational Issues
+- **Update Complexity**: Must coordinate updates across all services
+- **Scaling Inefficiency**: Cannot scale individual components independently
+- **Debugging Difficulty**: Hard to isolate performance issues
+- **Resource Waste**: Over-provisioning for all services on each server
+
+#### Availability Risks
+- **Cascading Failures**: Failure of one component affects all services
+- **Maintenance Downtime**: Server maintenance affects all services
+- **Resource Exhaustion**: One service can starve others of resources
+
+#### Better Architecture Approaches
+1. **Service Separation**: Dedicated servers for each service type
+2. **Microservices**: Break application into smaller, independent services
+3. **Container Architecture**: Use Docker/Kubernetes for service isolation
+4. **Horizontal Scaling**: Scale each service independently
+5. **Specialized Hardware**: Optimize servers for specific workloads
+
+#### Recommended Separation
+```
+Load Balancer Tier:
+- HAproxy + SSL termination
+- Dedicated hardware
+
+Web Tier:
+- Nginx servers
+- Static content serving
+- Reverse proxy functionality
+
+Application Tier:
+- Python/PHP application servers
+- Business logic processing
+- API endpoints
+
+Database Tier:
+- MySQL cluster
+- Separate read/write nodes
+- Dedicated storage optimization
+
+Caching Tier:
+- Redis/Memcached
+- Session storage
+- Application caching
+
+Monitoring Tier:
+- Dedicated monitoring infrastructure
+- Log aggregation servers
+- Analytics processing
+```
+
+This separation provides better performance, security, scalability, and maintainability compared to the monolithic approach where all services run on each server.
