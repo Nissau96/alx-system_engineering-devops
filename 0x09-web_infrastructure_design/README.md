@@ -44,5 +44,11 @@ A basic web infrastructure with:
 A design that introduces a load balancer and distributes web infrastructure components across three servers.
 
 * **File:** `1-distributed_web_infrastructure`
-* **Diagram:** [Link to your hosted image of 1-distributed_web_infrastructure.png]
 * **Description:** This design separates the web server, application server, and database onto different machines and adds a load balancer (HAProxy) as the entry point. It explains concepts like load-balancing algorithms, Active-Active setups, and Primary-Replica database clusters. It also identifies the remaining SPOFs and security vulnerabilities.
+
+### 📄 Task 2: Secured and monitored web infrastructure
+
+A design that adds security and observability to the distributed infrastructure by implementing firewalls, HTTPS, and monitoring.
+
+* **File:** `2-secured_and_monitored_web_infrastructure`
+* **Description:** This architecture secures the 3-server setup with firewalls on each host and encrypts traffic using an SSL certificate on the load balancer. It also adds monitoring clients to each server for data collection. The design highlights key issues like the risk of SSL termination and the SPOF of a single write-database.
