@@ -1,0 +1,310 @@
+# Task 1: Distributed Web Infrastructure
+
+## Infrastructure Diagram
+
+```
+User Request (www.foobar.com)
+         |
+         ↓
+[Internet/DNS Resolution]
+         |
+         ↓
+    Load Balancer (HAproxy)
+    Server 1 (8.8.8.8)
+    ┌─────────────────────┐
+    │  ┌───────────────┐  │
+    │  │  HAproxy      │  │ ← Load Balancer
+    │  │  (Port 80)    │  │
+    │  └───────────────┘  │
+    └─────────────────────┘
+            │
+            ├─────────────────────────────────┐
+            ↓                                 ↓
+    Web Server                        Application Server
+    Server 2 (8.8.8.9)              Server 3 (8.8.8.10)
+    ┌─────────────────────┐          ┌─────────────────────┐
+    │  ┌───────────────┐  │          │  ┌───────────────┐  │
+    │  │  Nginx        │  │          │  │  Python App   │  │
+    │  │  (Port 80)    │  │          │  │  (Port 5000)  │  │
+    │  └───────────────┘  │          │  │  Application  │  │
+    │  ┌───────────────┐  │          │  │  Files        │  │
+    │  │ Application   │  │          │  └───────────────┘  │
+    │  │ Files (Copy)  │  │          │  ┌───────────────┐  │
+    │  └───────────────┘  │          │  │ MySQL Primary│  │
+    │  ┌───────────────┐  │          │  │ Database      │  │
+    │  │ MySQL Replica │  │          │  └───────────────┘  │
+    │  │ Database      │  │          └─────────────────────┘
+    │  └───────────────┘  │                   │
+    └─────────────────────┘                   │
+                                              ↓
+                                    [Replication]
+```
+
+## Why Each Component Was Added
+
+### Additional Server 2 (Web Server - 8.8.8.9)
+**Purpose**: Dedicated web server to handle static content delivery and act as a reverse proxy
+**Benefits**:
+- Separates concerns (web serving vs application logic)
+- Improves performance by serving static files efficiently
+- Provides redundancy if application server fails
+- Can cache frequently requested content
+- Reduces load on application server
+
+### Additional Server 3 (Application Server - 8.8.8.10)  
+**Purpose**: Dedicated application server to run business logic and database operations
+**Benefits**:
+- Isolates application processing from web serving
+- Can be optimized specifically for application performance
+- Easier to scale application logic independently
+- Better resource allocation for CPU-intensive tasks
+- Hosts the primary database for data consistency
+
+### Load Balancer (HAproxy)
+**Purpose**: Distributes incoming requests across multiple servers
+**Benefits**:
+- Eliminates single point of failure for web requests
+- Distributes traffic load evenly
+- Provides high availability
+- Can detect failed servers and route around them
+- Enables horizontal scaling
+- Terminates SSL connections (SSL offloading)
+
+## Load Balancer Configuration
+
+### Distribution Algorithm: Round Robin
+**How it works**:
+1. HAproxy maintains a list of available backend servers
+2. Requests are distributed sequentially to each server
+3. After the last server in the list, it cycles back to the first
+4. If a server becomes unavailable, it's skipped in the rotation
+5. When the server recovers, it's added back to the rotation
+
+**Example Flow**:
+```
+Request 1 → Server 2 (Web Server)
+Request 2 → Server 3 (Application Server) 
+Request 3 → Server 2 (Web Server)
+Request 4 → Server 3 (Application Server)
+```
+
+**Alternative Algorithms Available**:
+- **Least Connections**: Routes to server with fewest active connections
+- **Source**: Routes based on client IP hash (session persistence)
+- **URI**: Routes based on requested URI
+- **Weighted Round Robin**: Assigns different weights to servers
+
+## Active-Active vs Active-Passive Setup
+
+### Current Setup: Active-Active
+**Definition**: All servers actively handle requests simultaneously
+**Characteristics**:
+- Load balancer distributes traffic to all available servers
+- Both web server and application server process requests
+- Better resource utilization
+- Higher overall throughput
+- If one server fails, others continue serving
+
+**Advantages**:
+- Maximum resource utilization
+- Better performance under load
+- Cost-effective (all servers working)
+
+**Disadvantages**:
+- More complex configuration
+- Potential data consistency issues
+- Requires session sharing mechanisms
+
+### Alternative: Active-Passive Setup
+**Definition**: One server handles requests while others remain on standby
+**Characteristics**:
+- Primary server handles all traffic
+- Secondary servers remain idle until failover
+- Automatic failover when primary fails
+- Simpler data consistency
+
+**When to Use Active-Passive**:
+- Applications requiring strict data consistency
+- Limited licensing for software
+- Simpler management requirements
+- Legacy applications not designed for clustering
+
+## Database Primary-Replica (Master-Slave) Cluster
+
+### How It Works
+1. **Write Operations**: All writes go to Primary (Master) database
+2. **Replication**: Primary logs all changes to binary log
+3. **Replica Sync**: Replica (Slave) reads binary log and applies changes
+4. **Read Operations**: Can be distributed between Primary and Replica
+5. **Consistency**: Replica eventually becomes consistent with Primary
+
+### Replication Process
+```
+Application Write → Primary Database → Binary Log → Replica Database
+     ↑                                                    ↓
+Application Read ←←←←←←←← Load Balancer ←←←←←←← Application Read
+```
+
+### Primary Node vs Replica Node
+
+#### Primary Node (Master) - Server 3
+**Responsibilities**:
+- Handles all write operations (INSERT, UPDATE, DELETE)
+- Maintains the authoritative version of data
+- Logs all changes to binary log for replication
+- Can handle read operations
+- Manages database schema changes
+
+**Application Interaction**:
+- All data modifications go here
+- Critical for data consistency
+- Single source of truth
+
+#### Replica Node (Slave) - Server 2
+**Responsibilities**:
+- Receives and applies changes from Primary
+- Handles read-only operations
+- Maintains synchronized copy of data
+- Can be promoted to Primary if needed
+
+**Application Interaction**:
+- Handles SELECT queries to reduce Primary load
+- Used for reporting and analytics
+- Backup data source
+
+### Replication Configuration Benefits
+- **Performance**: Distributes read load
+- **Availability**: Backup if Primary fails
+- **Backup**: Point-in-time recovery options
+- **Analytics**: Reporting without affecting Primary performance
+
+## Infrastructure Issues
+
+### Single Points of Failure (SPOF)
+
+#### 1. Load Balancer (HAproxy Server)
+**Risk**: If load balancer fails, entire website becomes unreachable
+**Impact**: Complete service outage
+**Mitigation Needed**: Secondary load balancer with IP failover
+
+#### 2. Primary Database (MySQL Master)
+**Risk**: If Primary database fails, no write operations possible
+**Impact**: Application becomes read-only, data loss risk
+**Mitigation Needed**: Automatic failover to Replica, backup strategies
+
+#### 3. Network Connectivity
+**Risk**: Network issues to any server affect availability
+**Impact**: Partial or complete service degradation
+**Mitigation Needed**: Multiple network paths, redundant connections
+
+#### 4. Application Files Synchronization
+**Risk**: If application files differ between servers
+**Impact**: Inconsistent behavior, potential errors
+**Mitigation Needed**: Automated deployment, file synchronization
+
+### Security Issues
+
+#### 1. No Firewall Protection
+**Risk**: All ports exposed to internet
+**Vulnerabilities**:
+- Direct database access from internet
+- Administrative ports accessible
+- No protection against port scanning
+- Vulnerable to DDoS attacks
+
+**Required Security Measures**:
+- Configure iptables/UFW on each server
+- Close unnecessary ports
+- Allow only required connections between servers
+
+#### 2. No HTTPS Encryption
+**Risk**: All data transmitted in plain text
+**Vulnerabilities**:
+- User credentials transmitted unencrypted
+- Session hijacking possible
+- Man-in-the-middle attacks
+- Search engines may penalize non-HTTPS sites
+
+**Required Security Measures**:
+- SSL/TLS certificates for domain
+- Force HTTPS redirects
+- HSTS headers implementation
+- Secure session management
+
+#### 3. No Authentication Between Services
+**Risk**: Services trust each other implicitly
+**Vulnerabilities**:
+- Database access without proper authentication
+- Inter-server communication unencrypted
+- No access control between services
+
+#### 4. No Input Validation/WAF
+**Risk**: Direct exposure to web application attacks
+**Vulnerabilities**:
+- SQL injection attacks
+- Cross-site scripting (XSS)
+- Command injection
+- File upload vulnerabilities
+
+### Monitoring Issues
+
+#### 1. No Health Monitoring
+**Risks**:
+- Failed servers may continue receiving traffic
+- Performance degradation goes unnoticed
+- No alerting for system issues
+- Difficult to identify bottlenecks
+
+**Required Monitoring**:
+- Server health checks (CPU, memory, disk)
+- Application performance monitoring
+- Database performance metrics
+- Network connectivity monitoring
+
+#### 2. No Log Aggregation
+**Risks**:
+- Difficult to troubleshoot issues across servers
+- No centralized security monitoring
+- Cannot track user behavior patterns
+- Compliance issues
+
+**Required Monitoring**:
+- Centralized logging (ELK stack, Fluentd)
+- Log analysis and alerting
+- Security event monitoring
+- Audit trail maintenance
+
+#### 3. No Performance Metrics
+**Risks**:
+- Cannot identify performance trends
+- Difficult to plan capacity
+- No SLA monitoring
+- Poor user experience insights
+
+**Required Monitoring**:
+- Response time monitoring
+- Throughput metrics
+- Error rate tracking
+- User experience monitoring
+
+## Recommended Improvements
+
+### High Priority Security
+1. Implement WAF (Web Application Firewall)
+2. Add SSL/TLS certificates
+3. Configure proper firewall rules
+4. Implement intrusion detection
+
+### High Priority Reliability  
+1. Add secondary load balancer
+2. Implement database clustering
+3. Add comprehensive monitoring
+4. Create automated backup systems
+
+### Performance Optimizations
+1. Add caching layer (Redis/Memcached)
+2. Implement CDN for static content
+3. Optimize database queries
+4. Add application performance monitoring
+
+This distributed architecture provides significant improvements over the single-server setup but still requires additional security and monitoring components for production use.
